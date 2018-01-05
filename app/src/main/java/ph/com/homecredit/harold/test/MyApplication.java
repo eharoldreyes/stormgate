@@ -1,8 +1,10 @@
 package ph.com.homecredit.harold.test;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 
@@ -38,38 +40,47 @@ public class MyApplication extends Application {
         dbSession = new DaoMaster(db).newSession();
         networkComponent = DaggerNetworkComponent.builder().networkModule(new NetworkModule(this)).build();
 
-        loadCitiesFromLocal();
+        new LoadCitiesFromFile(this).execute();
     }
 
+    private static class LoadCitiesFromFile extends AsyncTask<Void, Void, List<City>> {
 
-    private void loadCitiesFromLocal(){
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        @SuppressLint("StaticFieldLeak")
+        private final Context context;
+        private final DaoSession dbSession;
 
-        try {
-            if(!sharedPref.getBoolean("isSeeded", false)) {
-                List<City> cities = new ArrayList<>();
-                JSONArray jsonArray = GeneralUtils.getJSONArrayFromRaw(this, R.raw.city_list);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jCity = jsonArray.getJSONObject(i);
+        public LoadCitiesFromFile(Context context) {
+            this.context = context;
+            this.dbSession = ((MyApplication) context.getApplicationContext()).dbSession;
+        }
 
-                    City city = new Gson().fromJson(jCity.toString(), City.class);
+        @Override
+        protected List<City> doInBackground(Void... voids) {
 
-//                    City city = new City();
-//                    city.setId(jCity.getLong("id"));
-//                    city.setName(jCity.getString("name"));
-//                    city.setCountry(jCity.getString("country"));
-//                    try{
-//                        city.setPreferred(jCity.getBoolean("preferred"));
-//                    } catch (Exception e){}
-                    cities.add(city);
+            SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE);
+
+            if (!sharedPref.getBoolean("isSeeded", false)) {
+                try {
+                    List<City> cities = new ArrayList<>();
+                    JSONArray jsonArray = GeneralUtils.getJSONArrayFromRaw(context, R.raw.city_list);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jCity = jsonArray.getJSONObject(i);
+
+                        City city = new Gson().fromJson(jCity.toString(), City.class);
+
+                        cities.add(city);
+                    }
+                    dbSession.getCityDao().insertOrReplaceInTx(cities);
+                    sharedPref.edit().putBoolean("isSeeded", true).apply();
+
+                    return cities;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return dbSession.getCityDao().loadAll();
                 }
-                dbSession.getCityDao().insertOrReplaceInTx(cities);
-                sharedPref.edit().putBoolean("isSeeded", true).apply();
+            } else {
+                return dbSession.getCityDao().loadAll();
             }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -83,3 +94,12 @@ public class MyApplication extends Application {
 
 
 }
+
+
+//                    City city = new City();
+//                    city.setId(jCity.getLong("id"));
+//                    city.setName(jCity.getString("name"));
+//                    city.setCountry(jCity.getString("country"));
+//                    try{
+//                        city.setPreferred(jCity.getBoolean("preferred"));
+//                    } catch (Exception e){}

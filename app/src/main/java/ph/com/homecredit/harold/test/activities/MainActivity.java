@@ -3,9 +3,11 @@ package ph.com.homecredit.harold.test.activities;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,8 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable error) {
+                if(error instanceof SocketException)
+                    Toast.makeText(MainActivity.this, "Unable to connect to internet.", Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
