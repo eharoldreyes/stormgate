@@ -11,6 +11,7 @@ import java.util.List;
 
 import ph.com.homecredit.harold.test.R;
 import ph.com.homecredit.harold.test.models.City;
+import ph.com.homecredit.harold.test.models.Weather;
 
 /**
  * Created by Harold Reyes on 12/4/2017.
@@ -54,6 +55,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             this.tvCity = view.findViewById(R.id.city);
             this.tvWeather = view.findViewById(R.id.weather);
             this.tvTemperature = view.findViewById(R.id.temperature);
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -64,9 +66,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         }
 
         public void load(final City city) {
-            tvCity.setText(city.getName());
-            tvWeather.setText(city.getWeather().getDescription());
-            tvTemperature.setText(String.format("%s Celsius", city.getWeather().getTemp()));
+            tvCity.setText(String.format("%s, %s", city.getName(), city.getCountry()));
+            Weather weather = city.getWeather();
+            if(weather != null){
+                tvWeather.setText(String.format("Weather: %s", weather.getDescription()));
+                tvTemperature.setText(String.format("Temp: %s Celsius", weather.getTemp()));
+            }
         }
     }
 

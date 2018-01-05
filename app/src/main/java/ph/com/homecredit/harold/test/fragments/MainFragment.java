@@ -18,19 +18,17 @@ import ph.com.homecredit.harold.test.MyApplication;
 import ph.com.homecredit.harold.test.R;
 import ph.com.homecredit.harold.test.activities.MainActivity;
 import ph.com.homecredit.harold.test.adapters.MainAdapter;
-import ph.com.homecredit.harold.test.api.Api;
 import ph.com.homecredit.harold.test.models.City;
-import ph.com.homecredit.harold.test.models.CityDao.Properties;
+import ph.com.homecredit.harold.test.models.CityDao;
 import ph.com.homecredit.harold.test.models.DaoSession;
 
 /**
  * Created by haroldreyes on 12/26/17.
  */
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements MainActivity.OnUpdateListener{
 
     public static final String TAG = MainFragment.class.getSimpleName();
-    public static final String[] CITIES = {"London", "Prague", "San Francisco"};
     private RecyclerView recyclerView;
     private DaoSession dbSession;
     private List<City> cities = new ArrayList<>();
@@ -45,48 +43,32 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         activity = (MainActivity) getActivity();
         dbSession = ((MyApplication) activity.getApplication()).getDbSession();
+
+        activity.addOnUpdateListener(this);
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new MainAdapter(getContext(), cities));
 
-        refresh();
-        displayCitiesFromDB();
     }
 
-    private void refresh(){
-        final int[] completed = {0};
-        for (String city : CITIES) {
-            activity.mAbtApi.getWeatherByCity(city, new Api.NetworkCallback() {
-                @Override
-                public void onSuccess(Object response) {
-                    completed[0] += 1;
-                    if(completed[0] == CITIES.length) {
-                        displayCitiesFromDB();
-                    }
-                }
-
-                @Override
-                public void onError(Throwable error) {
-                    completed[0] += 1;
-                    if(completed[0] == CITIES.length) {
-                        displayCitiesFromDB();
-                    }
-                }
-            });
-        }
-    }
-
-    private void displayCitiesFromDB(){
+    @Override
+    public void onUpdate() {
         QueryBuilder<City> dbq = dbSession.getCityDao().queryBuilder();
-        for (String city : CITIES) {
-            dbq.where(Properties.Name.like("%" + city + "%"));
-        }
+        dbq.where(CityDao.Properties.Preferred.eq(true));
+
         cities.clear();
-        cities.addAll(dbSession.getCityDao().loadAll());
+        cities.addAll(dbq.build().list());
         recyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        activity.removeOnUpdateListener(this);
     }
 }

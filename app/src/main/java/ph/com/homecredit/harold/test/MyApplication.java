@@ -1,6 +1,10 @@
 package ph.com.homecredit.harold.test;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
 
 import org.greenrobot.greendao.database.Database;
 import org.json.JSONArray;
@@ -33,23 +37,39 @@ public class MyApplication extends Application {
         Database db = helper.getWritableDb();//ENCRYPTED ? helper.getEncryptedWritableDb("superhardtohackpassword") : helper.getWritableDb();
         dbSession = new DaoMaster(db).newSession();
         networkComponent = DaggerNetworkComponent.builder().networkModule(new NetworkModule(this)).build();
+
         loadCitiesFromLocal();
     }
 
-    private void loadCitiesFromLocal(){
-        try {
-            List<City> cities = new ArrayList<>();
-            JSONArray jsonArray = GeneralUtils.getJSONArrayFromRaw(this, R.raw.city_list);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jCity = jsonArray.getJSONObject(i);
-                City city = new City();
-                city.setId(jCity.getLong("id"));
-                city.setName(jCity.getString("name"));
-                cities.add(city);
-            }
-            dbSession.getCityDao().insertOrReplaceInTx(cities);
-        } catch (Exception e) {
 
+    private void loadCitiesFromLocal(){
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        try {
+            if(!sharedPref.getBoolean("isSeeded", false)) {
+                List<City> cities = new ArrayList<>();
+                JSONArray jsonArray = GeneralUtils.getJSONArrayFromRaw(this, R.raw.city_list);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jCity = jsonArray.getJSONObject(i);
+
+                    City city = new Gson().fromJson(jCity.toString(), City.class);
+
+//                    City city = new City();
+//                    city.setId(jCity.getLong("id"));
+//                    city.setName(jCity.getString("name"));
+//                    city.setCountry(jCity.getString("country"));
+//                    try{
+//                        city.setPreferred(jCity.getBoolean("preferred"));
+//                    } catch (Exception e){}
+                    cities.add(city);
+                }
+                dbSession.getCityDao().insertOrReplaceInTx(cities);
+                sharedPref.edit().putBoolean("isSeeded", true).apply();
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

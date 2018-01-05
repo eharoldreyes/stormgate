@@ -3,10 +3,12 @@ package ph.com.homecredit.harold.test.models;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
 import java.io.Serializable;
-import org.greenrobot.greendao.annotation.Generated;
+
+import ph.com.homecredit.harold.test.utils.GeneralUtils;
 
 /**
  * Created by haroldreyes on 12/26/17.
@@ -19,7 +21,7 @@ public class Weather implements Serializable {
 
     @Id
     @SerializedName("id")
-    private long id;
+    private long id = GeneralUtils.GenerateId();
 
     @SerializedName("main")
     private String main;

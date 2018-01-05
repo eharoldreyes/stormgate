@@ -1,12 +1,12 @@
 package ph.com.homecredit.harold.test.api;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -59,8 +59,9 @@ public class Api {
         }
     }
 
-    public void getWeatherByCityIds(long[] ids, final NetworkCallback callback){
-        apiClient.getWeatherByCityIds(Arrays.toString(ids), "metric", BuildConfig.APP_ID).enqueue(new Callback<ResponseBody>() {
+    public void getWeatherByCityIds(List<Long> ids, final NetworkCallback callback){
+        String stringIds = TextUtils.join(",",ids.toArray());
+        apiClient.getWeatherByCityIds(stringIds, "metric", BuildConfig.APP_ID).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
@@ -119,6 +120,7 @@ public class Api {
         City city = new City();
         city.setId(j.getLong("id"));
         city.setName(j.getString("name"));
+        city.setPreferred(true);
 
         city = dbSession.getCityDao().load(dbSession.getCityDao().insertOrReplace(city));
 
@@ -132,9 +134,11 @@ public class Api {
             weather.setIcon(jWeather.getString("icon"));
         }
 
-        JSONObject jWind = j.getJSONObject("wind");
-        weather.setWindDeg(jWind.getDouble("deg"));
-        weather.setWindspeed(jWind.getDouble("speed"));
+        try {
+            JSONObject jWind = j.getJSONObject("wind");
+            weather.setWindDeg(jWind.getDouble("deg"));
+            weather.setWindspeed(jWind.getDouble("speed"));
+        } catch (Exception e) {}
 
         weather.setDate(j.getLong("dt"));
 
