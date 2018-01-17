@@ -2,10 +2,6 @@ package ph.com.homecredit.harold.test.utils;
 
 import android.content.Context;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,14 +30,6 @@ public class GeneralUtils {
         }
 
         return writer.toString();
-    }
-
-    public static JSONObject getJSONObjectFromRaw(Context context, int rawId) throws IOException, JSONException {
-        return new JSONObject(getStringFromRAW(context, rawId));
-    }
-
-    public static JSONArray getJSONArrayFromRaw(Context context, int rawId) throws IOException, JSONException {
-        return new JSONArray(getStringFromRAW(context, rawId));
     }
 
     public static int randomInt(int range){

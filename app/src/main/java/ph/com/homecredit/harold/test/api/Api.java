@@ -117,12 +117,11 @@ public class Api {
 
     private City parseCityResponse(JSONObject j) throws Exception{
 
-        City city = new City();
-        city.setId(j.getLong("id"));
+        City city = dbSession.getCityDao().load(j.getLong("id"));
         city.setName(j.getString("name"));
         city.setPreferred(true);
 
-        city = dbSession.getCityDao().load(dbSession.getCityDao().insertOrReplace(city));
+        //city = dbSession.getCityDao().load(dbSession.getCityDao().insertOrReplace(city));
 
         Weather weather = new Weather();
 

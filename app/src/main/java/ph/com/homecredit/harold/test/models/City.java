@@ -1,13 +1,17 @@
 package ph.com.homecredit.harold.test.models;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.ToOne;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 
@@ -172,10 +176,25 @@ public class City implements Serializable {
         this.preferred = preferred;
     }
 
+    @Keep
+    public JSONObject toJSON() throws JSONException {
+        return new JSONObject(new Gson().toJson(this));
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return toJSON().toString();
+        } catch (JSONException e) {
+            return super.toString();
+        }
+    }
+
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 293508440)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getCityDao() : null;
     }
+
 }

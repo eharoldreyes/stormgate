@@ -9,10 +9,12 @@ import ph.com.homecredit.harold.test.R;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private static final String TAG = SplashActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
 
 
         new Handler().postDelayed(new Runnable() {
@@ -24,7 +26,5 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         }, 2000);
-
-
     }
 }
