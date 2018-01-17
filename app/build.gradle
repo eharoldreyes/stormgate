@@ -4,6 +4,8 @@ apply plugin: 'org.greenrobot.greendao'
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
+        google()
     }
 }
 android {
@@ -54,12 +56,14 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
 
-    compile 'com.github.bumptech.glide:glide:4.0.0'
-
     compile 'org.greenrobot:greendao:3.2.2'
 
     compile 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+
+
+    compile 'com.github.bumptech.glide:glide:4.5.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
 
     provided 'javax.annotation:jsr250-api:1.0'
 

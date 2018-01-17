@@ -17,7 +17,7 @@ import java.util.List;
 import ph.com.homecredit.harold.test.MyApplication;
 import ph.com.homecredit.harold.test.R;
 import ph.com.homecredit.harold.test.activities.MainActivity;
-import ph.com.homecredit.harold.test.adapters.MainAdapter;
+import ph.com.homecredit.harold.test.adapters.CityAdapter;
 import ph.com.homecredit.harold.test.models.City;
 import ph.com.homecredit.harold.test.models.CityDao;
 import ph.com.homecredit.harold.test.models.DaoSession;
@@ -52,7 +52,7 @@ public class MainFragment extends Fragment implements MainActivity.OnUpdateListe
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new MainAdapter(getContext(), cities));
+        recyclerView.setAdapter(new CityAdapter(getContext(), cities));
 
     }
 
