@@ -1,9 +1,11 @@
 package ph.com.homecredit.harold.test.deps;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -54,6 +56,7 @@ public class NetworkModule {
                         Request original = chain.request();
 
                         // Customize the request
+                        @SuppressLint("DefaultLocale")
                         Request request = original.newBuilder()
                                 .header("Content-Type", "application/json")
                                 .removeHeader("Pragma")
@@ -67,7 +70,8 @@ public class NetworkModule {
                     }
                 })
                 .cache(cache)
-
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .build();
 
 
