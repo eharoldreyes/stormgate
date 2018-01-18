@@ -33,8 +33,8 @@ public class Api {
     private final Client apiClient;
     private final DaoSession dbSession;
 
-    public interface NetworkCallback {
-        void onSuccess(Object response);
+    public interface NetworkCallback<T> {
+        void onSuccess(T response);
 
         void onError(Throwable error);
     }
@@ -59,7 +59,7 @@ public class Api {
         }
     }
 
-    public void getWeatherByCityIds(List<Long> ids, final NetworkCallback callback){
+    public void getWeatherByCityIds(List<Long> ids, final NetworkCallback<List<City>> callback){
         String stringIds = TextUtils.join(",",ids.toArray());
         apiClient.getWeatherByCityIds(stringIds, "metric", BuildConfig.APP_ID).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -89,9 +89,9 @@ public class Api {
     }
 
 
-    public void getWeatherByCity(String cityName, final NetworkCallback callback) {
+    public void getWeatherByCityId(long id, final NetworkCallback<City> callback) {
 
-        apiClient.getWeatherByCityName(cityName, BuildConfig.APP_ID)
+        apiClient.getWeatherByCityId(id, BuildConfig.APP_ID)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -138,6 +138,13 @@ public class Api {
             weather.setWindDeg(jWind.getDouble("deg"));
             weather.setWindspeed(jWind.getDouble("speed"));
         } catch (Exception e) {}
+
+        try {
+            JSONObject jCoord = j.getJSONObject("coord");
+            city.setLat(jCoord.getDouble("lat"));
+            city.setLng(jCoord.getDouble("lng"));
+        } catch (Exception e) {}
+
 
         weather.setDate(j.getLong("dt"));
 

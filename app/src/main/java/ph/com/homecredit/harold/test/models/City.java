@@ -43,6 +43,11 @@ public class City implements Serializable {
     @ToOne(joinProperty = "weatherId")
     private Weather Weather;
 
+    @SerializedName("lat")
+    private double lat;
+    @SerializedName("lng")
+    private double lng;
+
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
@@ -54,13 +59,24 @@ public class City implements Serializable {
     @Generated(hash = 10981549)
     private transient Long Weather__resolvedKey;
 
-    @Generated(hash = 1587281753)
-    public City(long id, String name, String country, boolean preferred, long weatherId) {
+    @Generated(hash = 1686355781)
+    public City(long id, String name, String country, boolean preferred, long weatherId, double lat,
+            double lng) {
         this.id = id;
         this.name = name;
         this.country = country;
         this.preferred = preferred;
         this.weatherId = weatherId;
+        this.lat = lat;
+        this.lng = lng;
+    }
+
+    @Keep
+    public City(long id, String name, String country, boolean preferred) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.preferred = preferred;
     }
 
     @Generated(hash = 750791287)
@@ -188,6 +204,22 @@ public class City implements Serializable {
         } catch (JSONException e) {
             return super.toString();
         }
+    }
+
+    public double getLat() {
+        return this.lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return this.lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 
     /** called by internal mechanisms, do not call yourself. */

@@ -45,6 +45,7 @@ public class Weather implements Serializable {
     private double windspeed;
     @SerializedName("windDeg")
     private double windDeg;
+
     @Generated(hash = 1244058922)
     public Weather(long id, String main, String description, String icon, long date,
             double temp, double pressure, double humidity, double windspeed,
@@ -123,7 +124,6 @@ public class Weather implements Serializable {
     public void setWindDeg(double windDeg) {
         this.windDeg = windDeg;
     }
-
 //    "dt": 1514281800,
 //    "temp": 277.13,
 //    "pressure": 999,

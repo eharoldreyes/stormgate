@@ -2,12 +2,18 @@ package ph.com.homecredit.harold.test.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import ph.com.homecredit.harold.test.BaseActivity;
 import ph.com.homecredit.harold.test.MyApplication;
 import ph.com.homecredit.harold.test.R;
+import ph.com.homecredit.harold.test.api.Api;
 import ph.com.homecredit.harold.test.models.City;
 import ph.com.homecredit.harold.test.models.DaoSession;
 import ph.com.homecredit.harold.test.models.Weather;
@@ -20,7 +26,7 @@ public class WeatherActivity extends BaseActivity {
 
 
     private City city;
-    private TextView tvCity, tvMain, tvDescription, tvDate, tvPressure, tvHumidity, tvWindspeed, tvWindDeg;
+    private TextView tvMain, tvDescription, tvPressure, tvHumidity, tvWindspeed, tvWindDeg, tvTemp;
     private DaoSession dbSession;
     private ImageView ivIcon;
 
@@ -33,28 +39,70 @@ public class WeatherActivity extends BaseActivity {
         city = (City) getIntent().getSerializableExtra("city");
         city = dbSession.getCityDao().load(city.getId());
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(String.format("%s, %s", city.getName(), city.getCountry()));
+        }
+
         ivIcon = findViewById(R.id.ivIcon);
-        tvCity = findViewById(R.id.tvCity);
         tvMain = findViewById(R.id.tvMain);
         tvDescription = findViewById(R.id.tvDescription);
-        tvDate = findViewById(R.id.tvDate);
         tvPressure = findViewById(R.id.tvPressure);
         tvHumidity = findViewById(R.id.tvHumidity);
         tvWindspeed = findViewById(R.id.tvWindspeed);
         tvWindDeg = findViewById(R.id.tvWindDeg);
+        tvTemp = findViewById(R.id.tvTemp);
 
-        Weather weather = city.getWeather();
+        displayWeather(city.getWeather());
+    }
 
-        tvCity.setText(String.format("%s, %s", city.getName(), city.getCountry()));
+    private void displayWeather(Weather weather) {
+
         tvMain.setText(weather.getMain());
         tvDescription.setText(weather.getDescription());
-        tvDate.setText(String.format("Date: %d", weather.getDate()));
-        tvPressure.setText(String.format("Pressure: %s", weather.getPressure()));
-        tvHumidity.setText(String.format("Humidity: %s", weather.getHumidity()));
-        tvWindspeed.setText(String.format("Wind Speed: %s", weather.getWindspeed()));
-        tvWindDeg.setText(String.format("Wind Deg: %s", weather.getWindDeg()));
+        tvPressure.setText(String.valueOf(weather.getPressure()));
+        tvHumidity.setText(String.valueOf(weather.getHumidity()));
+        tvWindspeed.setText(String.valueOf(weather.getWindspeed()));
+        tvWindDeg.setText(String.valueOf(weather.getWindDeg()));
+        tvTemp.setText(String.valueOf(weather.getTemp()));
 
-        //GlideApp.with(this).load("http://openweathermap.org/img/w/" + weather.getIcon() + ".png").into(ivIcon);
-        //01d.png
+        Glide.with(this).load("http://openweathermap.org/img/w/" + weather.getIcon() + ".png").into(ivIcon);
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_refresh) {
+            refresh();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void refresh() {
+        mAbtApi.getWeatherByCityId(city.getId(), new Api.NetworkCallback<City>() {
+            @Override
+            public void onSuccess(City response) {
+                displayWeather(response.getWeather());
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
+                Toast.makeText(WeatherActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

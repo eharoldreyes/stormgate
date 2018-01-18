@@ -15,8 +15,8 @@ import retrofit2.http.Query;
 public interface Client {
 
     @GET("weather")
-    Call<ResponseBody> getWeatherByCityName(
-            @Query("q") String cityName,
+    Call<ResponseBody> getWeatherByCityId(
+            @Query("id") long id,
             @Query("APPID") String apiKey);
 
     @GET("group")

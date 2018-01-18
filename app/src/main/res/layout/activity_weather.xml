@@ -2,77 +2,148 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/default_padding">
+    android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_padding"
-        android:orientation="vertical">
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/default_padding">
 
         <ImageView
             android:id="@+id/ivIcon"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tvMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Main"
+            android:textAllCaps="true"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/tvDescription"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description" />
+            android:layout_gravity="center"
+            android:text="Description"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/default_padding">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1022"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Pressure"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:paddingBottom="@dimen/default_padding"/>
+
+            <TextView
+                android:id="@+id/tvHumidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="100"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Humidity"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:paddingBottom="@dimen/default_padding" />
+
+            <TextView
+                android:id="@+id/tvTemp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="100"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Temperature"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvWindspeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="3.1"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Wind Speed"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:paddingBottom="@dimen/default_padding" />
+
+            <TextView
+                android:id="@+id/tvWindDeg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="330.0"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Wind Degree"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="City" />
-
-    <TextView
-        android:id="@+id/tvMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Main" />
-
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date" />
-
-    <TextView
-        android:id="@+id/tvPressure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pressure" />
-
-    <TextView
-        android:id="@+id/tvHumidity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="humidity" />
-
-    <TextView
-        android:id="@+id/tvWindspeed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="windspeed" />
-
-
-    <TextView
-        android:id="@+id/tvWindDeg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="windDeg" />
-
-
 </LinearLayout>
-
 
     <!--this.id = id;--><!--this.main = main;--><!--this.description = description;--><!--this.icon = icon;--><!--this.date = date;--><!--this.temp = temp;--><!--this.pressure = pressure;--><!--this.humidity = humidity;--><!--this.windspeed = windspeed;--><!--this.windDeg = windDeg;-->

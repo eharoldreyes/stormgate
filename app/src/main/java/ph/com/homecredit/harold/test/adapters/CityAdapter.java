@@ -6,7 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -50,11 +53,13 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
         private final View view;
         private final TextView tvCity, tvWeather, tvTemperature;
+        private final ImageView ivIcon;
         private City city;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
+            this.ivIcon = view.findViewById(R.id.ivIcon);
             this.tvCity = view.findViewById(R.id.city);
             this.tvWeather = view.findViewById(R.id.weather);
             this.tvTemperature = view.findViewById(R.id.temperature);
@@ -77,6 +82,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
             if(weather != null){
                 tvWeather.setText(String.format("Weather: %s", weather.getDescription()));
                 tvTemperature.setText(String.format("Temp: %s Celsius", weather.getTemp()));
+                Glide.with(context).load("http://openweathermap.org/img/w/" + weather.getIcon() + ".png").into(ivIcon);
             }
         }
     }

@@ -68,9 +68,9 @@ public class MyApplication extends Application {
 
     public void setInitialCities() {
         City[] cities = new City[]{
-                new City(2643743, "London", "GB", true, 0),
-                new City(4548393, "Prague", "US", true, 0),
-                new City(5391959, "San Francisco", "US", true, 0)};
+                new City(2643743, "London", "GB", true),
+                new City(4548393, "Prague", "US", true),
+                new City(5391959, "San Francisco", "US", true)};
 
         dbSession.getCityDao().insertOrReplaceInTx(cities);
 
