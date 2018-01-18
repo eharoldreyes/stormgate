@@ -57,9 +57,9 @@ public class MainActivity extends BaseActivity {
         for (City city : cx)
             cityIds.add(city.getId());
 
-        mAbtApi.getWeatherByCityIds(cityIds, new Api.NetworkCallback() {
+        mAbtApi.getWeatherByCityIds(cityIds, new Api.NetworkCallback<List<City>>() {
             @Override
-            public void onSuccess(Object response) {
+            public void onSuccess(List<City> response) {
                 for (OnUpdateListener onUpdateListener : onUpdateListeners)
                     if (onUpdateListener != null)
                         onUpdateListener.onUpdate();
@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onError(Throwable error) {
                 if(error instanceof SocketException)
-                    Toast.makeText(MainActivity.this, "Unable to connect to internet.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, R.string.unable_to_connect, Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });

@@ -1,11 +1,27 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'io.fabric'
 
 repositories {
-    jcenter()
-    maven { url 'https://maven.google.com' }
-    mavenCentral()
     google()
+    jcenter()
+    mavenCentral()
+    maven { url 'https://maven.google.com' }
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://maven.google.com' }
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+' //Use open ended version as per fabric
+    }
 }
 
 android {
@@ -19,12 +35,11 @@ android {
         versionCode 3333
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-
         buildConfigField "String", "BASEURL", "\"http://api.openweathermap.org/data/2.5/\""
         buildConfigField "int", "LIMIT", "100"
         buildConfigField "int", "CACHETIME", "432000" // 5days
         buildConfigField "String", "APP_ID", "\"a4b02fe211aa549da64bb755ca5373f7\""
-        buildConfigField "String", "DATABASE_NAME", "\"dev\""
+        buildConfigField "String", "DATABASE_NAME", "\"db_dev\""
     }
     buildTypes {
         release {
@@ -32,7 +47,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions{
+//    productFlavors {
+//        production {
+//            dimension "mode"
+//            buildConfigField "String", "BUILD_VARIANT", "\"Production\""
+//            buildConfigField "String", "DATABASE_NAME", "\"db_prod\""
+//        }
+//        dev {
+//            dimension "mode"
+//            applicationIdSuffix ".dev"
+//            versionNameSuffix "-dev"
+//            buildConfigField "String", "BUILD_VARIANT", "\"Development\""
+//            buildConfigField "String", "DATABASE_NAME", "\"db_dev\""
+//        }
+//        unitTest {
+//            dimension "mode"
+//            applicationIdSuffix ".test"
+//            versionNameSuffix "-test"
+//            buildConfigField "String", "BUILD_VARIANT", "\"Testing\""
+//            buildConfigField "String", "DATABASE_NAME", "\"db_testing\""
+//        }
+//    }
+    packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
 }
@@ -61,10 +97,13 @@ dependencies {
 
     compile 'com.github.bumptech.glide:glide:4.5.0'
 
+    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true;
+    }
+
     compile 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
 
     provided 'javax.annotation:jsr250-api:1.0'
-
     testCompile 'junit:junit:4.12'
 }

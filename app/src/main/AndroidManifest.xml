@@ -27,6 +27,9 @@
         </activity>
         <activity android:name=".activities.MainActivity"/>
         <activity android:name=".activities.WeatherActivity"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="7f517b647e4a4afc239f13f23396cab6cfe137d5" />
     </application>
 
 </manifest>

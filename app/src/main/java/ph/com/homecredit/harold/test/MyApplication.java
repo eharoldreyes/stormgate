@@ -7,12 +7,15 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.greenrobot.greendao.database.Database;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.fabric.sdk.android.Fabric;
 import ph.com.homecredit.harold.test.deps.DaggerNetworkComponent;
 import ph.com.homecredit.harold.test.deps.NetworkComponent;
 import ph.com.homecredit.harold.test.deps.NetworkModule;
@@ -35,6 +38,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, BuildConfig.DATABASE_NAME);// + (ENCRYPTED ? "-db-encrypted" : "-db"));
         Database db = helper.getWritableDb();//ENCRYPTED ? helper.getEncryptedWritableDb("superhardtohackpassword") : helper.getWritableDb();
         dbSession = new DaoMaster(db).newSession();
@@ -117,7 +121,7 @@ public class MyApplication extends Application {
                 if (s != null)
                     callback.onResult(s);
                 else
-                    callback.onError(new Error("Failed to load cities"));
+                    callback.onError(new Error(getString(R.string.load_city_failed)));
             }
         }.execute();
 

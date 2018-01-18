@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Open Weather Map</string>
     <string name="refresh">Refresh</string>
+    <string name="load_city_failed">Failed to load cities</string>
+    <string name="weather">Weather: %s</string>
+    <string name="temp">Temp: %s Celsius</string>
+    <string name="unable_to_connect">Unable to connect to internet.</string>
 </resources>

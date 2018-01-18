@@ -80,8 +80,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
             tvCity.setText(String.format("%s, %s", city.getName(), city.getCountry()));
             Weather weather = city.getWeather();
             if(weather != null){
-                tvWeather.setText(String.format("Weather: %s", weather.getDescription()));
-                tvTemperature.setText(String.format("Temp: %s Celsius", weather.getTemp()));
+                tvWeather.setText(String.format(context.getString(R.string.weather), weather.getDescription()));
+                tvTemperature.setText(String.format(context.getString(R.string.temp), String.valueOf(weather.getTemp())));
                 Glide.with(context).load("http://openweathermap.org/img/w/" + weather.getIcon() + ".png").into(ivIcon);
             }
         }
